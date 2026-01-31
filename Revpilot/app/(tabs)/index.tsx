@@ -4,7 +4,7 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Link, useFocusEffect } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated, { FadeIn } from 'react-native-reanimated';
 
 import { GlassCardBase } from '../../constants/theme';
 import { querySql } from '../../db/database';
@@ -98,7 +98,7 @@ export default function DashboardScreen() {
       >
         <Text style={styles.title}>Dashboard</Text>
 
-        <Animated.View entering={FadeInDown.delay(40)} style={styles.card}>
+        <Animated.View entering={FadeIn.delay(40)} style={styles.card}>
           <View style={styles.cardHeader}>
             <Text style={styles.cardTitle}>Today's Sales</Text>
             <View style={[styles.iconBadge, styles.iconBadgePeach]}>
@@ -108,7 +108,7 @@ export default function DashboardScreen() {
           <Text style={styles.cardValue}>{formatCurrency(stats.todaySales)}</Text>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(80)} style={styles.card}>
+        <Animated.View entering={FadeIn.delay(80)} style={styles.card}>
           <View style={styles.cardHeader}>
             <Text style={styles.cardTitle}>Monthly Sales</Text>
             <View style={[styles.iconBadge, styles.iconBadgeBlue]}>
@@ -120,7 +120,7 @@ export default function DashboardScreen() {
 
         <Link href="/products?tab=inactive" asChild>
           <Pressable>
-            <Animated.View entering={FadeInDown.delay(120)} style={styles.card}>
+            <Animated.View entering={FadeIn.delay(120)} style={styles.card}>
               <View style={styles.cardHeader}>
                 <Text style={styles.cardTitle}>Low Stock Alerts</Text>
                 <View style={[styles.iconBadge, styles.iconBadgePink]}>

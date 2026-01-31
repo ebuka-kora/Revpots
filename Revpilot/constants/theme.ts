@@ -5,18 +5,13 @@
 
 import { Platform, ViewStyle } from 'react-native';
 
-/** Afrikad-style glass card: semi-transparent green, no blur */
+/** Afrikad-style glass card: semi-transparent green, no blur, flat (no shadow) */
 export const GlassCardBase: ViewStyle = {
   backgroundColor: 'rgba(77, 98, 80, 0.30)',
   borderWidth: 1.5,
   borderColor: 'rgba(77, 98, 80, 0.30)',
   borderRadius: 20,
   overflow: 'hidden',
-  shadowColor: '#000',
-  shadowOffset: { width: 0, height: 8 },
-  shadowOpacity: 0.4,
-  shadowRadius: 12,
-  ...(Platform.OS === 'android' && { elevation: 8 }),
 };
 
 /** App font – Merriweather (from assets/images/Merriweather) */
