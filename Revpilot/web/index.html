@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="description" content="RevPilot - Offline-first sales and invoice tracking app" />
+  <meta name="theme-color" content="#f6b9fa" />
+  <title>RevPilot - Sales & Invoice Tracker</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    #root {
+      width: 100%;
+      min-height: 100vh;
+      margin: 0 auto;
+      position: relative;
+    }
+    
+    /* Constrain to mobile size on desktop */
+    @media (min-width: 480px) {
+      #root {
+        max-width: 428px;
+        margin: 0 auto;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        min-height: 100vh;
+      }
+      
+      body {
+        background-color: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+      }
+    }
+    
+    /* Prevent text selection on mobile */
+    @media (max-width: 479px) {
+      * {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      
+      input, textarea {
+        -webkit-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+        user-select: text;
+      }
+    }
+    
+    /* Prevent zoom on double tap */
+    * {
+      touch-action: manipulation;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+</body>
+</html>
