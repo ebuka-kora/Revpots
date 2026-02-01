@@ -344,11 +344,15 @@ const styles = StyleSheet.create({
   },
   card: {
     ...GlassCardBase,
+    backgroundColor: 'rgba(108, 148, 214, 0.29)',
+    borderColor: 'rgba(108, 148, 214, 0.95)',
     padding: 16,
     marginBottom: 12,
   },
   cardSelected: {
-    borderColor: 'rgba(209, 106, 157, 0.6)',
+      ...GlassCardBase,
+      backgroundColor: 'rgba(108, 148, 214, 0.29)',
+      borderColor: 'rgba(108, 148, 214, 0.95)',
   },
   productName: {
     fontFamily: 'Merriweather',
@@ -385,11 +389,12 @@ const styles = StyleSheet.create({
     color: '#222',
   },
   summary: {
-    backgroundColor: 'rgba(255,255,255,0.78)',
+    ...GlassCardBase,
+    backgroundColor: 'rgba(108, 148, 214, 0.29)',
+    borderColor: 'rgba(108, 148, 214, 0.95)',
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.5)',
     marginTop: 8,
     marginBottom: 12,
   },
@@ -400,10 +405,13 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     marginTop: 8,
-    backgroundColor: '#d16a9d', // Soft pink for primary action
+    ...GlassCardBase,
+    backgroundColor: 'rgba(214, 108, 120, 0.66)',
+    borderColor: 'rgba(214, 108, 120, 0.95)',
     paddingVertical: 16,
     borderRadius: 10,
     alignItems: 'center',
+    bottom: 15,
   },
   saveButtonPressed: {
     opacity: 0.85,
@@ -422,10 +430,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'rgba(255,255,255,0.78)',
+    ...GlassCardBase,
+    backgroundColor: '#f6b9fa',
     paddingHorizontal: 16,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255,255,255,0.4)',
   },
 });

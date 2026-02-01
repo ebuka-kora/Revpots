@@ -297,8 +297,8 @@ const styles = StyleSheet.create({
     color: '#2f2f3a',
   },
   primaryRow: {
-    backgroundColor: 'rgba(108, 148, 214, 0.85)',
-    borderColor: 'rgba(108, 148, 214, 0.5)',
+    backgroundColor: 'rgba(108, 148, 214, 0.66)',
+    borderColor: 'rgba(108, 148, 214, 0.95)',
     marginTop: 4,
   },
   primaryRowText: {

@@ -269,16 +269,14 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'rgba(255,255,255,0.78)',
+    // backgroundColor: 'rgba(255,255,255,0.78)',
     paddingHorizontal: 16,
-    paddingTop: 5,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255,255,255,0.4)',
+  
   },
   addButton: {
     ...GlassCardBase,
-    backgroundColor: 'rgba(108, 148, 214, 0.85)',
-    borderColor: 'rgba(108, 148, 214, 0.5)',
+    backgroundColor: 'rgba(108, 148, 214, 0.66)',
+    borderColor: 'rgba(108, 148, 214, 0.95)',
     paddingVertical: 12,
     alignItems: 'center',
   },
@@ -293,8 +291,8 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   cardLowStock: {
-    backgroundColor: 'rgba(180, 98, 80, 0.35)',
-    borderColor: 'rgba(180, 98, 80, 0.40)',
+    backgroundColor: 'rgba(234, 118, 118, 0.56)',
+    borderColor: 'rgba(234, 118, 118, 0.95)',
   },
   cardHeader: {
     flexDirection: 'row',

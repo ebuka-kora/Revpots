@@ -191,16 +191,16 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     ...GlassCardBase,
-    backgroundColor: 'rgba(240, 124, 148, 0.85)',
-    borderColor: 'rgba(240, 124, 148, 0.5)',
+    backgroundColor: 'rgba(214, 108, 120, 0.66)',
+    borderColor: 'rgba(214, 108, 120, 0.95)',
     paddingVertical: 14,
     alignItems: 'center',
   },
   primaryButtonText: {
     fontFamily: 'Merriweather',
     color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: '900',
   },
   listContent: {
     paddingBottom: 80, // Space for the fixed button
@@ -210,8 +210,9 @@ const styles = StyleSheet.create({
   },
   monthCard: {
     ...GlassCardBase,
-    backgroundColor: 'rgba(255, 255, 255, 0.72)',
-    borderColor: 'rgba(255, 255, 255, 0.5)',
+    ...GlassCardBase,
+    backgroundColor: 'rgba(108, 148, 214, 0.29)',
+    borderColor: 'rgba(108, 148, 214, 0.95)',
     padding: 16,
     marginBottom: 12,
   },
@@ -223,8 +224,8 @@ const styles = StyleSheet.create({
   },
   monthLabel: {
     fontFamily: 'Merriweather',
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 22,
+    fontWeight: '900',
     color: '#2f2f3a',
   },
   monthYear: {
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
   },
   statValue: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '900',
     color: '#2f2f3a',
   },
   fixedButtonContainer: {
@@ -254,11 +255,11 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'rgba(255,255,255,0.78)',
+    // backgroundColor: 'rgba(255,255,255,0.78)',
     paddingHorizontal: 16,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255,255,255,0.4)',
+    // paddingTop: 12,
+    // borderTopWidth: 1,
+    // borderTopColor: 'rgba(255,255,255,0.4)',
   },
   emptyText: {
     textAlign: 'center',

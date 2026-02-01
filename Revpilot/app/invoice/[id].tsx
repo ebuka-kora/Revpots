@@ -287,12 +287,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Merriweather',
-    fontSize: 24,
+    fontSize: 25,
     fontWeight: '600',
     color: '#222',
     textAlign: 'center',
     flex: 1,
-  },
+  },        
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',

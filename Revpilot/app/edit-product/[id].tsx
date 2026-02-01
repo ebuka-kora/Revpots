@@ -15,6 +15,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+import { GlassCardBase } from '../../constants/theme';
 import { executeSql, querySql } from '../../db/database';
 
 type ProductRow = {
@@ -286,9 +287,10 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     marginTop: 16,
-    backgroundColor: '#111',
+    ...GlassCardBase,
+    backgroundColor: 'rgba(108, 148, 214, 0.66)',
+    borderColor: 'rgba(108, 148, 214, 0.95)',
     paddingVertical: 16,
-    borderRadius: 10,
     alignItems: 'center',
   },
   saveButtonPressed: {
