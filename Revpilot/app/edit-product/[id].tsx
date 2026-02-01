@@ -16,7 +16,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { GlassCardBase } from '../../constants/theme';
-import { executeSql, querySql } from '../../db/database';
+import { executeSql, querySql } from '@/db/database';
 
 type ProductRow = {
   id: number;

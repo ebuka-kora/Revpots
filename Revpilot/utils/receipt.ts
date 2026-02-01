@@ -1,5 +1,4 @@
-import * as Print from 'expo-print';
-import * as Sharing from 'expo-sharing';
+import { Platform } from 'react-native';
 
 import { formatCurrency } from './format';
 
@@ -115,9 +114,26 @@ export const generateReceipt = async (
     </html>
   `;
 
-  const { uri } = await Print.printToFileAsync({ html });
-  const canShare = await Sharing.isAvailableAsync();
-  if (canShare) {
-    await Sharing.shareAsync(uri);
+  if (Platform.OS === 'web') {
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(html);
+      printWindow.document.close();
+      printWindow.print();
+      printWindow.close();
+    }
+    return;
+  }
+
+  try {
+    const Print = await import('expo-print');
+    const Sharing = await import('expo-sharing');
+    const { uri } = await Print.printToFileAsync({ html });
+    const canShare = await Sharing.isAvailableAsync();
+    if (canShare) {
+      await Sharing.shareAsync(uri);
+    }
+  } catch (e) {
+    console.warn('Receipt print/share not available', e);
   }
 };

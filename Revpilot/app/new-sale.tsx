@@ -3,6 +3,7 @@ import {
   Alert,
   ImageBackground,
   KeyboardAvoidingView,
+  Modal,
   Platform,
   Pressable,
   ScrollView,
@@ -17,7 +18,7 @@ import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { GlassCardBase } from '../constants/theme';
-import { openDatabase, querySql } from '../db/database';
+import { openDatabase, querySql } from '@/db/database';
 import { formatCurrency } from '../utils/format';
 
 type Product = {
@@ -38,6 +39,8 @@ export default function NewSaleScreen() {
   const [products, setProducts] = useState<Product[]>([]);
   const [selected, setSelected] = useState<Record<number, SelectedItem>>({});
   const [isSaving, setIsSaving] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successTotal, setSuccessTotal] = useState(0);
 
   useEffect(() => {
     let isMounted = true;
@@ -181,16 +184,18 @@ export default function NewSaleScreen() {
       });
 
       setSelected({});
-      Alert.alert(
-        'Sale saved 🎉',
-        `You sold ${formatCurrency(totalAmount)} today.`,
-        [{ text: 'OK', onPress: () => router.push('/sales' as any) }]
-      );
+      setSuccessTotal(totalAmount);
+      setShowSuccessModal(true);
     } catch {
       Alert.alert('Couldn’t save', 'Please try again.');
     } finally {
       setIsSaving(false);
     }
+  };
+
+  const handleSuccessOk = () => {
+    setShowSuccessModal(false);
+    router.push('/sales' as any);
   };
 
   return (
@@ -200,6 +205,34 @@ export default function NewSaleScreen() {
       imageStyle={styles.backgroundImage}
       resizeMode="contain"
     >
+    <Modal
+      visible={showSuccessModal}
+      transparent
+      animationType="fade"
+      onRequestClose={handleSuccessOk}
+    >
+      <View style={styles.modalOverlay}>
+        <View style={styles.successCard}>
+          <View style={styles.successIconWrap}>
+            <MaterialCommunityIcons name="check-circle" size={64} color="#2e7d32" />
+          </View>
+          <Text style={styles.successTitle}>Successful</Text>
+          <Text style={styles.successSubtitle}>Your sale has been saved.</Text>
+          <View style={styles.successTotalWrap}>
+            <Text style={styles.successTotalLabel}>Total</Text>
+            <Text style={styles.successTotalAmount}>{formatCurrency(successTotal)}</Text>
+          </View>
+          <Pressable
+            onPress={handleSuccessOk}
+            style={({ pressed }) => [styles.successOkButton, pressed && styles.successOkPressed]}
+            accessibilityRole="button"
+            accessibilityLabel="OK"
+          >
+            <Text style={styles.successOkText}>OK</Text>
+          </Pressable>
+        </View>
+      </View>
+    </Modal>
     <SafeAreaView style={[styles.container, { paddingTop: insets.top + 50 }]}>
       <View style={styles.headerRow}>
         <Pressable
@@ -425,13 +458,91 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+  },
+  successCard: {
+    width: '100%',
+    maxWidth: 320,
+    backgroundColor: '#fff',
+    borderRadius: 24,
+    padding: 28,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.2,
+    shadowRadius: 16,
+    elevation: 12,
+  },
+  successIconWrap: {
+    marginBottom: 16,
+  },
+  successTitle: {
+    fontFamily: 'Merriweather',
+    fontSize: 26,
+    fontWeight: '700',
+    color: '#1b5e20',
+    marginBottom: 6,
+  },
+  successSubtitle: {
+    fontSize: 16,
+    color: '#555',
+    marginBottom: 20,
+  },
+  successTotalWrap: {
+    backgroundColor: 'rgba(108, 148, 214, 0.15)',
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    marginBottom: 24,
+    alignSelf: 'stretch',
+    alignItems: 'center',
+  },
+  successTotalLabel: {
+    fontSize: 13,
+    color: '#5a5a73',
+    marginBottom: 4,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  successTotalAmount: {
+    fontFamily: 'Merriweather',
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#2f2f3a',
+  },
+  successOkButton: {
+    ...GlassCardBase,
+    backgroundColor: 'rgba(108, 148, 214, 0.66)',
+    borderColor: 'rgba(108, 148, 214, 0.95)',
+    paddingVertical: 14,
+    paddingHorizontal: 48,
+    alignItems: 'center',
+    alignSelf: 'stretch',
+  },
+  successOkPressed: {
+    opacity: 0.9,
+  },
+  successOkText: {
+    fontFamily: 'Merriweather',
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#fff',
+  },
   fixedFooterContainer: {
     position: 'absolute',
-    bottom: 0,
+    bottom: 12,
     left: 0,
     right: 0,
     ...GlassCardBase,
     backgroundColor: '#f6b9fa',
     paddingHorizontal: 16,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255,255,255,0.4)',
   },
 });

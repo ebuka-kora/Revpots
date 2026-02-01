@@ -13,7 +13,7 @@ import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { openDatabase, querySql } from '../../db/database';
+import { openDatabase, querySql } from '@/db/database';
 import { generateReceipt } from '../../utils/receipt';
 import { formatCurrency } from '../../utils/format';
 

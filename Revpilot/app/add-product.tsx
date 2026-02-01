@@ -16,7 +16,7 @@ import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { GlassCardBase } from '../constants/theme';
-import { executeSql, querySql } from '../db/database';
+import { executeSql, querySql } from '@/db/database';
 
 const getLowStockLevel = (stockQuantity: number) => {
   if (stockQuantity > 10) return 5;

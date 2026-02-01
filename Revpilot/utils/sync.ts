@@ -1,4 +1,4 @@
-import { openDatabase, querySql, executeSql } from '../db/database';
+import { openDatabase, querySql, executeSql } from '@/db/database';
 import { api } from './api';
 
 const DEVICE_ID_KEY = 'device_id_storage';

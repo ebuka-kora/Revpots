@@ -15,7 +15,7 @@ import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { GlassCardBase } from '../../constants/theme';
-import { querySql } from '../../db/database';
+import { querySql } from '@/db/database';
 import { formatCurrency } from '../../utils/format';
 
 type Invoice = {

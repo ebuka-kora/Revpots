@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Animated, { FadeIn } from 'react-native-reanimated';
 
 import { GlassCardBase } from '../../constants/theme';
-import { querySql } from '../../db/database';
+import { querySql } from '@/db/database';
 import { formatCurrency } from '../../utils/format';
 
 type DashboardStats = {

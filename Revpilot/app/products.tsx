@@ -16,7 +16,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 
 import { GlassCardBase } from '../constants/theme';
-import { executeSql, querySql } from '../db/database';
+import { executeSql, querySql } from '@/db/database';
 import { formatCurrency } from '../utils/format';
 
 type Product = {
