@@ -148,7 +148,7 @@ export default function SalesScreen() {
         )}
       </ScrollView>
 
-      <View style={[styles.fixedButtonContainer, { paddingBottom: insets.bottom, bottom: tabBarHeight }]}>
+      <View style={[styles.fixedButtonContainer, { paddingBottom: insets.bottom, bottom: tabBarHeight - 50 }]}>
         <Link href="/new-sale" asChild>
           <Pressable accessibilityRole="button" style={styles.primaryButton}>
             <Text style={styles.primaryButtonText}>New Sale</Text>

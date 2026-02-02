@@ -175,8 +175,8 @@ const styles = StyleSheet.create({
     ...GlassCardBase,
     padding: 16,
     marginBottom: 12,
-    borderColor: 'rgba(180, 98, 80, 0.40)',
-    backgroundColor: 'rgba(77, 98, 80, 0.28)',
+    borderColor: 'rgba(108, 148, 214, 0.95)',
+    backgroundColor: 'rgba(108, 148, 214, 0.29)',
   },
   cardHeader: {
     flexDirection: 'row',

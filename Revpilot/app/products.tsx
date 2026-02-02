@@ -236,7 +236,7 @@ export default function ProductsScreen() {
         )}
       </ScrollView>
 
-      <View style={[styles.fixedButtonContainer, { paddingBottom: insets.bottom, bottom: tabBarHeight }]}>
+      <View style={[styles.fixedButtonContainer, { paddingBottom: insets.bottom, bottom: tabBarHeight - 50 }]}>
         <Link href={addProductHref} asChild>
           <Pressable
             accessibilityRole="button"
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     ...GlassCardBase,
-    backgroundColor: 'rgba(108, 148, 214, 0.66)',
+    backgroundColor: 'rgb(108, 149, 214)',
     borderColor: 'rgba(108, 148, 214, 0.95)',
     paddingVertical: 12,
     alignItems: 'center',

@@ -5,11 +5,11 @@
 
 import { Platform, ViewStyle } from 'react-native';
 
-/** Afrikad-style glass card: semi-transparent green, no blur, flat (no shadow) */
+/** Glass card: semi-transparent blue, no blur, flat (no shadow) */
 export const GlassCardBase: ViewStyle = {
-  backgroundColor: 'rgba(77, 98, 80, 0.30)',
+  backgroundColor: 'rgba(108, 148, 214, 0.29)',
   borderWidth: 1.5,
-  borderColor: 'rgba(77, 98, 80, 0.30)',
+  borderColor: 'rgba(108, 148, 214, 0.95)',
   borderRadius: 20,
   overflow: 'hidden',
 };
