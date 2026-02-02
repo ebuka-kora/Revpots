@@ -1,4 +1,4 @@
-import { ActivityIndicator, Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Image, ImageBackground, Platform, StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 
 type LoadingScreenProps = {
@@ -76,11 +76,15 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.6)',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#2f2f3a',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
+    ...(Platform.OS === 'web'
+      ? { boxShadow: '0px 2px 8px 0px rgba(47, 47, 58, 0.08)' }
+      : {
+          shadowColor: '#2f2f3a',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.08,
+          shadowRadius: 8,
+          elevation: 3,
+        }),
   },
   logo: {
     width: 80,

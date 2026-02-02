@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+  ActivityIndicator,
   Alert,
   ImageBackground,
   KeyboardAvoidingView,
@@ -189,9 +190,14 @@ export default function AddProductScreen() {
           ]}
           disabled={isSaving}
         >
-          <Text style={styles.saveButtonText}>
-            {isSaving ? 'Saving...' : 'Save'}
-          </Text>
+          {isSaving ? (
+            <View style={styles.saveButtonContent}>
+              <ActivityIndicator size="small" color="#fff" style={styles.saveButtonSpinner} />
+              <Text style={styles.saveButtonText}>Saving...</Text>
+            </View>
+          ) : (
+            <Text style={styles.saveButtonText}>Save</Text>
+          )}
         </Pressable>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -231,7 +237,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Merriweather',
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: '600',
     color: '#222',
     textAlign: 'center',
@@ -288,6 +294,14 @@ const styles = StyleSheet.create({
   },
   saveButtonDisabled: {
     opacity: 0.6,
+  },
+  saveButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  saveButtonSpinner: {
+    marginRight: 8,
   },
   saveButtonText: {
     fontFamily: 'Merriweather',

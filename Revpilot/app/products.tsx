@@ -11,8 +11,8 @@ import {
 } from 'react-native';
 import { Link, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeBottomTabBarHeight } from '@/hooks/use-safe-bottom-tab-bar-height';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 
 import { GlassCardBase } from '../constants/theme';
@@ -31,7 +31,7 @@ type TabType = 'active' | 'inactive' | 'all';
 
 export default function ProductsScreen() {
   const insets = useSafeAreaInsets();
-  const tabBarHeight = useBottomTabBarHeight();
+  const tabBarHeight = useSafeBottomTabBarHeight();
   const router = useRouter();
   const { tab } = useLocalSearchParams<{ tab?: string }>();
   const [products, setProducts] = useState<Product[]>([]);
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Merriweather',
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: '600',
     marginBottom: 10,
     color: '#2f2f3a',

@@ -1,6 +1,6 @@
 import { ImageBackground, Pressable, StyleSheet, Text, View } from 'react-native';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useSafeBottomTabBarHeight } from '@/hooks/use-safe-bottom-tab-bar-height';
 import { useRouter } from 'expo-router';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { FadeInDown } from 'react-native-reanimated';
@@ -9,7 +9,7 @@ import { GlassCardBase } from '../../constants/theme';
 
 export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
-  const tabBarHeight = useBottomTabBarHeight();
+  const tabBarHeight = useSafeBottomTabBarHeight();
   const router = useRouter();
 
   return (
@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Merriweather',
-    fontSize: 20,
-    fontWeight: '600',
+    fontSize: 30,
+    fontWeight: '900',
     color: '#2f2f3a',
     marginBottom: 12,
   },

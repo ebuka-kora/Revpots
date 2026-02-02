@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
+  ActivityIndicator,
   Alert,
   ImageBackground,
   KeyboardAvoidingView,
@@ -15,7 +16,9 @@ import {
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useRouter } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { GlassCardBase } from '../constants/theme';
 import { openDatabase, querySql } from '@/db/database';
@@ -46,7 +49,7 @@ export default function NewSaleScreen() {
     let isMounted = true;
     const loadProducts = async () => {
       const rows = (await querySql(
-        'SELECT id, name, sellingPrice, quantity FROM products ORDER BY name ASC'
+        'SELECT id, name, sellingPrice, quantity FROM products WHERE quantity > 0 ORDER BY name ASC'
       )) as Product[];
       if (isMounted) {
         setProducts(rows);
@@ -211,27 +214,53 @@ export default function NewSaleScreen() {
       animationType="fade"
       onRequestClose={handleSuccessOk}
     >
-      <View style={styles.modalOverlay}>
-        <View style={styles.successCard}>
-          <View style={styles.successIconWrap}>
-            <MaterialCommunityIcons name="check-circle" size={64} color="#2e7d32" />
-          </View>
-          <Text style={styles.successTitle}>Successful</Text>
-          <Text style={styles.successSubtitle}>Your sale has been saved.</Text>
-          <View style={styles.successTotalWrap}>
-            <Text style={styles.successTotalLabel}>Total</Text>
-            <Text style={styles.successTotalAmount}>{formatCurrency(successTotal)}</Text>
-          </View>
-          <Pressable
-            onPress={handleSuccessOk}
-            style={({ pressed }) => [styles.successOkButton, pressed && styles.successOkPressed]}
-            accessibilityRole="button"
-            accessibilityLabel="OK"
+      <Pressable style={styles.modalOverlay} onPress={handleSuccessOk}>
+        <Animated.View
+          entering={FadeInDown.duration(400)}
+          style={styles.successCardWrapper}
+        >
+          <LinearGradient
+            colors={['#FFCBDA', '#C695B9', '#AF80A1']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.successCardGradient}
           >
-            <Text style={styles.successOkText}>OK</Text>
-          </Pressable>
-        </View>
-      </View>
+            <Pressable style={styles.successCard} onPress={(e) => e.stopPropagation()}>
+              <View style={styles.successIconWrap}>
+                <View style={styles.successIconBg}>
+                  <MaterialCommunityIcons name="check-circle" size={56} color="#AF80A1" />
+                </View>
+              </View>
+              <Text style={styles.successTitle}>Successful</Text>
+              <Text style={styles.successSubtitle}>Your sale has been saved.</Text>
+              <LinearGradient
+                colors={['rgba(255,203,218,0.4)', 'rgba(198,149,185,0.3)']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.successTotalWrap}
+              >
+                <Text style={styles.successTotalLabel}>Total</Text>
+                <Text style={styles.successTotalAmount}>{formatCurrency(successTotal)}</Text>
+              </LinearGradient>
+              <Pressable
+                onPress={handleSuccessOk}
+                style={({ pressed }) => [styles.successOkButton, pressed && styles.successOkPressed]}
+                accessibilityRole="button"
+                accessibilityLabel="OK"
+              >
+                <LinearGradient
+                  colors={['#C695B9', '#AF80A1']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={styles.successOkGradient}
+                >
+                  <Text style={styles.successOkText}>OK</Text>
+                </LinearGradient>
+              </Pressable>
+            </Pressable>
+          </LinearGradient>
+        </Animated.View>
+      </Pressable>
     </Modal>
     <SafeAreaView style={[styles.container, { paddingTop: insets.top + 50 }]}>
       <View style={styles.headerRow}>
@@ -308,9 +337,14 @@ export default function NewSaleScreen() {
           ]}
           disabled={isSaving}
         >
-          <Text style={styles.saveButtonText}>
-            {isSaving ? 'Saving...' : 'Save Sale'}
-          </Text>
+          {isSaving ? (
+            <View style={styles.saveButtonContent}>
+              <ActivityIndicator size="small" color="#fff" style={styles.saveButtonSpinner} />
+              <Text style={styles.saveButtonText}>Saving...</Text>
+            </View>
+          ) : (
+            <Text style={styles.saveButtonText}>Save Sale</Text>
+          )}
         </Pressable>
       </View>
     </SafeAreaView>
@@ -349,7 +383,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Merriweather',
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: '600',
     color: '#222',
     textAlign: 'center',
@@ -452,6 +486,14 @@ const styles = StyleSheet.create({
   saveButtonDisabled: {
     opacity: 0.6,
   },
+  saveButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  saveButtonSpinner: {
+    marginRight: 8,
+  },
   saveButtonText: {
     fontFamily: 'Merriweather',
     color: '#fff',
@@ -460,69 +502,90 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0,0,0,0.55)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
   },
-  successCard: {
+  successCardWrapper: {
     width: '100%',
-    maxWidth: 320,
-    backgroundColor: '#fff',
+    maxWidth: 340,
+  },
+  successCardGradient: {
+    padding: 2,
     borderRadius: 24,
+    ...(Platform.OS === 'web'
+      ? { boxShadow: '0px 12px 32px 0px rgba(175, 128, 161, 0.35)' }
+      : {
+          shadowColor: '#AF80A1',
+          shadowOffset: { width: 0, height: 12 },
+          shadowOpacity: 0.35,
+          shadowRadius: 24,
+          elevation: 16,
+        }),
+  },
+  successCard: {
+    backgroundColor: 'rgba(255,255,255,0.98)',
+    borderRadius: 22,
     padding: 28,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.2,
-    shadowRadius: 16,
-    elevation: 12,
   },
   successIconWrap: {
     marginBottom: 16,
   },
+  successIconBg: {
+    width: 88,
+    height: 88,
+    borderRadius: 44,
+    backgroundColor: 'rgba(255,203,218,0.4)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   successTitle: {
     fontFamily: 'Merriweather',
-    fontSize: 26,
+    fontSize: 28,
     fontWeight: '700',
-    color: '#1b5e20',
+    color: '#AF80A1',
     marginBottom: 6,
   },
   successSubtitle: {
     fontSize: 16,
-    color: '#555',
+    color: '#5a5a5a',
     marginBottom: 20,
   },
   successTotalWrap: {
-    backgroundColor: 'rgba(108, 148, 214, 0.15)',
-    borderRadius: 12,
-    paddingVertical: 14,
-    paddingHorizontal: 24,
+    borderRadius: 16,
+    paddingVertical: 18,
+    paddingHorizontal: 28,
     marginBottom: 24,
     alignSelf: 'stretch',
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#C695B9',
   },
   successTotalLabel: {
-    fontSize: 13,
-    color: '#5a5a73',
-    marginBottom: 4,
+    fontSize: 12,
+    color: '#AF80A1',
+    marginBottom: 6,
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    letterSpacing: 1,
+    fontWeight: '600',
   },
   successTotalAmount: {
     fontFamily: 'Merriweather',
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: '700',
-    color: '#2f2f3a',
+    color: '#AF80A1',
   },
   successOkButton: {
-    ...GlassCardBase,
-    backgroundColor: 'rgba(108, 148, 214, 0.66)',
-    borderColor: 'rgba(108, 148, 214, 0.95)',
-    paddingVertical: 14,
-    paddingHorizontal: 48,
-    alignItems: 'center',
     alignSelf: 'stretch',
+    borderRadius: 14,
+    overflow: 'hidden',
+  },
+  successOkGradient: {
+    paddingVertical: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   successOkPressed: {
     opacity: 0.9,

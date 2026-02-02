@@ -9,8 +9,8 @@ import {
   View,
 } from 'react-native';
 import { Link, useFocusEffect, useRouter } from 'expo-router';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeBottomTabBarHeight } from '@/hooks/use-safe-bottom-tab-bar-height';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -39,7 +39,7 @@ const months = [
 
 export default function SalesScreen() {
   const insets = useSafeAreaInsets();
-  const tabBarHeight = useBottomTabBarHeight();
+  const tabBarHeight = useSafeBottomTabBarHeight();
   const router = useRouter();
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -184,8 +184,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Merriweather',
-    fontSize: 24,
-    fontWeight: '600',
+    fontSize: 30,
+    fontWeight: '900',
     color: '#2f2f3a',
     marginBottom: 16,
   },

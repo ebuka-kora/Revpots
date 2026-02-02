@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Merriweather',
-    fontSize: 22,
+    fontSize: 30,
     fontWeight: '600',
     color: '#222',
     marginBottom: 12,

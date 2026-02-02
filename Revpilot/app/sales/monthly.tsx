@@ -14,10 +14,11 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+import { ReceiptModal } from '@/components/receipt-modal';
 import { GlassCardBase } from '../../constants/theme';
 import { querySql } from '@/db/database';
 import { formatCurrency } from '../../utils/format';
-import { generateReceipt } from '../../utils/receipt';
+import type { ReceiptItem } from '../../utils/receipt';
 
 type Invoice = {
   id: number;
@@ -51,6 +52,10 @@ export default function MonthlyInvoicesScreen() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [isSharingInvoiceId, setIsSharingInvoiceId] = useState<number | null>(null);
+  const [receiptModal, setReceiptModal] = useState<{
+    invoice: Invoice;
+    items: ReceiptItem[];
+  } | null>(null);
 
   const monthLabel = months[monthNum - 1] ?? `Month ${monthNum}`;
 
@@ -87,42 +92,56 @@ export default function MonthlyInvoicesScreen() {
     setRefreshing(false);
   }, [loadInvoices]);
 
-  const handleShareReceipt = async (invoice: Invoice) => {
+  const handleOpenReceipt = async (invoice: Invoice) => {
     setIsSharingInvoiceId(invoice.id);
     try {
+      const idToUse = invoice.id != null ? Number(invoice.id) : 0;
       const itemRows = (await querySql(
-        `SELECT invoice_items.id,
-                invoice_items.productId,
-                invoice_items.quantity,
-                invoice_items.price,
-                products.name as productName
-         FROM invoice_items
-         JOIN products ON products.id = invoice_items.productId
-         WHERE invoice_items.invoiceId = ?
-         ORDER BY invoice_items.id ASC`,
-        [invoice.id]
-      )) as any[];
+        'SELECT id, productId, quantity, price FROM invoice_items WHERE invoiceId = ? ORDER BY id ASC',
+        [idToUse]
+      )) as Record<string, unknown>[];
 
-      await generateReceipt(
-        {
-          id: invoice.id,
-          createdAt: invoice.createdAt,
-          totalAmount: invoice.totalAmount,
-        },
-        itemRows.map((item) => ({
-          productName: item.productName,
-          quantity: item.quantity,
-          price: item.price,
-        }))
-      );
+      const rawItems = Array.isArray(itemRows) ? itemRows : [];
+      if (rawItems.length === 0) {
+        setReceiptModal({ invoice, items: [] });
+        return;
+      }
+
+      const productIds = [...new Set(rawItems.map((r) => Number(r.productId ?? r.productid ?? 0)).filter(Boolean))];
+      const nameByProductId: Record<number, string> = {};
+      if (productIds.length > 0) {
+        const placeholders = productIds.map(() => '?').join(',');
+        const nameRows = (await querySql(
+          `SELECT id, name FROM products WHERE id IN (${placeholders})`,
+          productIds
+        )) as Record<string, unknown>[];
+        for (const r of nameRows || []) {
+          const pid = Number(r.id ?? r.ID ?? 0);
+          const n = r.name ?? r.Name ?? '';
+          if (pid) nameByProductId[pid] = String(n);
+        }
+      }
+
+      setReceiptModal({
+        invoice,
+        items: rawItems.map((row) => {
+          const productId = Number(row.productId ?? row.productid ?? 0);
+          return {
+            productName: nameByProductId[productId] ?? '',
+            quantity: Number(row.quantity ?? 0),
+            price: Number(row.price ?? 0),
+          };
+        }),
+      });
     } catch (error) {
-      console.warn('Failed to generate receipt', error);
+      console.warn('Failed to load receipt', error);
     } finally {
       setIsSharingInvoiceId(null);
     }
   };
 
   return (
+    <>
     <ImageBackground
       source={require('../../assets/images/omyre1.png')}
       style={styles.background}
@@ -168,22 +187,6 @@ export default function MonthlyInvoicesScreen() {
                     </View>
                     <View style={styles.amountAndShareRow}>
                       <Text style={styles.invoiceAmount}>{formatCurrency(item.totalAmount)}</Text>
-                      <Pressable
-                        accessibilityRole="button"
-                        accessibilityLabel="Share receipt"
-                        onPress={(e) => {
-                          e.stopPropagation();
-                          handleShareReceipt(item);
-                        }}
-                        disabled={isSharingInvoiceId === item.id}
-                        style={styles.shareButton}
-                      >
-                        {isSharingInvoiceId === item.id ? (
-                          <ActivityIndicator color="#5a5a73" size="small" />
-                        ) : (
-                          <MaterialCommunityIcons name="share-variant" size={18} color="#5a5a73" />
-                        )}
-                      </Pressable>
                     </View>
                   </View>
                 </Animated.View>
@@ -194,6 +197,19 @@ export default function MonthlyInvoicesScreen() {
       </ScrollView>
     </SafeAreaView>
     </ImageBackground>
+    {receiptModal && (
+      <ReceiptModal
+        visible={!!receiptModal}
+        onClose={() => setReceiptModal(null)}
+        invoice={{
+          id: receiptModal.invoice.id,
+          createdAt: receiptModal.invoice.createdAt,
+          totalAmount: receiptModal.invoice.totalAmount,
+        }}
+        items={receiptModal.items}
+      />
+    )}
+    </>
   );
 }
 

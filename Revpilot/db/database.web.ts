@@ -156,12 +156,13 @@ async function initWebDb() {
         stmt.free();
         throw e;
       }
-      await saveDb();
       const idStmt = sqlDb.prepare('SELECT last_insert_rowid() as id');
       idStmt.step();
       const idRow = idStmt.getAsObject();
       idStmt.free();
-      return { lastInsertRowId: idRow.id || 0 };
+      const insertId = Number(idRow.id) || 0;
+      await saveDb();
+      return { lastInsertRowId: insertId };
     },
     getAllAsync: async (query: string, params: any[] = []) => {
       const stmt = sqlDb.prepare(query);

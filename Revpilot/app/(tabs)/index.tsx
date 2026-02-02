@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { ImageBackground, RefreshControl, ScrollView, StyleSheet, Text, Pressable, View } from 'react-native';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeBottomTabBarHeight } from '@/hooks/use-safe-bottom-tab-bar-height';
 import { Link, useFocusEffect } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Animated, { FadeIn } from 'react-native-reanimated';
@@ -30,7 +30,7 @@ const getDayRange = (date: Date) => {
 
 export default function DashboardScreen() {
   const insets = useSafeAreaInsets();
-  const tabBarHeight = useBottomTabBarHeight();
+  const tabBarHeight = useSafeBottomTabBarHeight();
   const [stats, setStats] = useState<DashboardStats>({
     todaySales: 0,
     monthlySales: 0,
@@ -179,8 +179,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Merriweather',
-    fontSize: 20,
-    fontWeight: '600',
+    fontSize: 30,
+    fontWeight: '900',
     color: '#2f2f3a',
     marginBottom: 14,
   },
