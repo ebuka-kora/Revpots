@@ -41,6 +41,7 @@ export default function NewSaleScreen() {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [selected, setSelected] = useState<Record<number, SelectedItem>>({});
+  const [searchQuery, setSearchQuery] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successTotal, setSuccessTotal] = useState(0);
@@ -60,6 +61,15 @@ export default function NewSaleScreen() {
       isMounted = false;
     };
   }, []);
+
+  const searchLower = searchQuery.trim().toLowerCase();
+  const filteredProducts = useMemo(
+    () =>
+      searchLower
+        ? products.filter((p) => p.name.toLowerCase().includes(searchLower))
+        : products,
+    [products, searchLower]
+  );
 
   const totals = useMemo(() => {
     let totalItems = 0;
@@ -274,13 +284,26 @@ export default function NewSaleScreen() {
         <Text style={styles.title}>New Sale</Text>
         <View style={styles.headerSpacer} />
       </View>
+      <View style={styles.searchWrap}>
+        <MaterialCommunityIcons name="magnify" size={20} color="#6b6b7a" style={styles.searchIcon} />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search products..."
+          placeholderTextColor="#9a9aaa"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          autoCapitalize="none"
+          autoCorrect={false}
+          clearButtonMode="while-editing"
+        />
+      </View>
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <ScrollView contentContainerStyle={styles.content}>
 
-        {products.map((product) => {
+        {filteredProducts.map((product) => {
           const isSelected = Boolean(selected[product.id]);
           const selectedItem = selected[product.id];
           return (
@@ -378,7 +401,7 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 16,
-    paddingBottom: 170, // Increased padding to accommodate fixed footer
+    paddingBottom: 200, // Increased padding to accommodate fixed footer
     paddingTop: 8, // Adjusted padding to account for fixed header
   },
   title: {
@@ -408,6 +431,27 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.5)',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  searchWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.85)',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(198,149,185,0.4)',
+    marginHorizontal: 16,
+    marginBottom: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+  },
+  searchIcon: {
+    marginRight: 10,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#222',
+    paddingVertical: Platform.OS === 'web' ? 4 : 0,
   },
   card: {
     ...GlassCardBase,

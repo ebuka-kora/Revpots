@@ -2,11 +2,13 @@ import { useCallback, useState } from 'react';
 import {
   Alert,
   ImageBackground,
+  Platform,
   Pressable,
   RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from 'react-native';
 import { Link, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
@@ -36,6 +38,7 @@ export default function ProductsScreen() {
   const { tab } = useLocalSearchParams<{ tab?: string }>();
   const [products, setProducts] = useState<Product[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedTab, setSelectedTab] = useState<TabType>('active');
   const addProductHref = '/add-product' as any;
 
@@ -101,7 +104,11 @@ export default function ProductsScreen() {
     return products;
   };
 
-  const filteredProducts = getFilteredProducts();
+  const tabFiltered = getFilteredProducts();
+  const searchLower = searchQuery.trim().toLowerCase();
+  const filteredProducts = searchLower
+    ? tabFiltered.filter((p) => p.name.toLowerCase().includes(searchLower))
+    : tabFiltered;
 
   return (
     <ImageBackground
@@ -112,6 +119,20 @@ export default function ProductsScreen() {
     >
     <SafeAreaView style={[styles.container, { paddingTop: insets.top + 50 }]}>
       <Text style={styles.title}>Products</Text>
+
+      <View style={styles.searchWrap}>
+        <MaterialCommunityIcons name="magnify" size={20} color="#6b6b7a" style={styles.searchIcon} />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search products..."
+          placeholderTextColor="#9a9aaa"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          autoCapitalize="none"
+          autoCorrect={false}
+          clearButtonMode="while-editing"
+        />
+      </View>
 
       <View style={styles.tabsContainer}>
         <Pressable
@@ -144,7 +165,7 @@ export default function ProductsScreen() {
       </View>
 
       <ScrollView
-        contentContainerStyle={[styles.listContent, { paddingBottom: 30 + tabBarHeight }]}
+        contentContainerStyle={[styles.listContent, { paddingBottom: 59 + tabBarHeight }]}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -154,7 +175,9 @@ export default function ProductsScreen() {
           <Animated.Text entering={FadeIn} style={styles.emptyText}>
             {products.length === 0
               ? 'No products yet. Tap "Add Product" to get started.'
-              : `No ${selectedTab} products.`}
+              : searchLower
+                ? 'No products match your search.'
+                : `No ${selectedTab} products.`}
           </Animated.Text>
         ) : (
           filteredProducts.map((item, index) => {
@@ -257,6 +280,26 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 10,
     color: '#2f2f3a',
+  },
+  searchWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.85)',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(198,149,185,0.4)',
+    marginBottom: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+  },
+  searchIcon: {
+    marginRight: 10,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#222',
+    paddingVertical: Platform.OS === 'web' ? 4 : 0,
   },
   scrollView: {
     flex: 1,
