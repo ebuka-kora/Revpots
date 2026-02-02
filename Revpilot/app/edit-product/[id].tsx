@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Dimensions,
   ImageBackground,
   KeyboardAvoidingView,
   Platform,
@@ -18,6 +19,17 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { GlassCardBase } from '../../constants/theme';
 import { executeSql, querySql } from '@/db/database';
+
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('screen');
+
+const allowDecimalOnly = (value: string): string => {
+  const filtered = value.replace(/[^\d.]/g, '');
+  const firstDot = filtered.indexOf('.');
+  if (firstDot === -1) return filtered;
+  return filtered.slice(0, firstDot + 1) + filtered.slice(firstDot + 1).replace(/\./g, '');
+};
+
+const allowIntegerOnly = (value: string): string => value.replace(/\D/g, '');
 
 type ProductRow = {
   id: number;
@@ -119,12 +131,15 @@ export default function EditProductScreen() {
   };
 
   return (
-    <ImageBackground
-      source={require('../../assets/images/omyre1.png')}
-      style={styles.background}
-      imageStyle={styles.backgroundImage}
-      resizeMode="contain"
-    >
+    <View style={styles.screenWrap}>
+      <View style={styles.backgroundLayer}>
+        <ImageBackground
+          source={require('../../assets/images/omyre1.png')}
+          style={styles.background}
+          imageStyle={styles.backgroundImage}
+          resizeMode="contain"
+        />
+      </View>
     <SafeAreaView style={[styles.container, { paddingTop: insets.top + 50 }]}>
       <View style={styles.headerRow}>
         <Pressable
@@ -159,7 +174,7 @@ export default function EditProductScreen() {
             <TextInput
               style={styles.input}
               value={costPrice}
-              onChangeText={setCostPrice}
+              onChangeText={(v) => setCostPrice(allowDecimalOnly(v))}
               keyboardType="decimal-pad"
               placeholder="0"
               placeholderTextColor="#999"
@@ -171,7 +186,7 @@ export default function EditProductScreen() {
             <TextInput
               style={styles.input}
               value={sellingPrice}
-              onChangeText={setSellingPrice}
+              onChangeText={(v) => setSellingPrice(allowDecimalOnly(v))}
               keyboardType="decimal-pad"
               placeholder="0"
               placeholderTextColor="#999"
@@ -183,7 +198,7 @@ export default function EditProductScreen() {
             <TextInput
               style={styles.input}
               value={quantity}
-              onChangeText={setQuantity}
+              onChangeText={(v) => setQuantity(allowIntegerOnly(v))}
               keyboardType="number-pad"
               placeholder="0"
               placeholderTextColor="#999"
@@ -212,13 +227,24 @@ export default function EditProductScreen() {
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
-    </ImageBackground>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  background: { 
-    flex: 1, 
+  screenWrap: {
+    flex: 1,
+    overflow: 'hidden',
+  },
+  backgroundLayer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+  },
+  background: {
+    flex: 1,
     backgroundColor: '#f6b9fa',
     width: '100%',
     height: '100%',
