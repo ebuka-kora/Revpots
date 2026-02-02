@@ -41,20 +41,28 @@ export default function SettingsScreen() {
       {/* More section */}
       <Animated.View entering={FadeInDown.delay(60)} style={styles.section}>
         <Text style={styles.sectionTitle}>More</Text>
-        <Pressable style={[styles.row, styles.rowDisabled]}>
+        <Pressable
+          accessibilityRole="button"
+          style={styles.row}
+          onPress={() => router.push('/settings/app-lock')}
+        >
           <View style={styles.rowLeft}>
-            <MaterialCommunityIcons name="lock-outline" size={20} color="#9a9aa8" />
+            <MaterialCommunityIcons name="lock-outline" size={20} color="#6f7aa6" />
             <Text style={styles.rowText}>App Lock</Text>
           </View>
-          <Text style={styles.rowHint}>Coming soon</Text>
+          <MaterialCommunityIcons name="chevron-right" size={20} color="#b0b0c0" />
         </Pressable>
 
-        <Pressable style={styles.row}>
+        <Pressable
+          accessibilityRole="button"
+          style={styles.row}
+          onPress={() => router.push('/settings/about')}
+        >
           <View style={styles.rowLeft}>
-            <MaterialCommunityIcons name="information-outline" size={20} color="#9a9aa8" />
+            <MaterialCommunityIcons name="information-outline" size={20} color="#6f7aa6" />
             <Text style={styles.rowText}>About</Text>
           </View>
-          <Text style={styles.rowHint}>Offline Sales Book</Text>
+          <MaterialCommunityIcons name="chevron-right" size={20} color="#b0b0c0" />
         </Pressable>
       </Animated.View>
     </SafeAreaView>

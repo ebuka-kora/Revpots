@@ -35,7 +35,7 @@ function CustomTabBar({
   const activeColor = Colors[colorScheme ?? 'light'].tint;
   const inactiveColor = Colors[colorScheme ?? 'light'].tabIconDefault;
 
-  const visibleRoutes = state.routes.filter((route) => route.name !== 'explore');
+  const visibleRoutes = state.routes;
   const focusedRouteKey = state.routes[state.index]?.key;
 
   return (
@@ -103,7 +103,6 @@ export default function TabLayout() {
       <Tabs.Screen name="sales" options={{ title: 'Sales' }} />
       <Tabs.Screen name="reports" options={{ title: 'Reports' }} />
       <Tabs.Screen name="settings" options={{ title: 'Settings' }} />
-      <Tabs.Screen name="explore" options={{ href: null }} />
     </Tabs>
   );
 }

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Dimensions,
   ImageBackground,
   KeyboardAvoidingView,
   Modal,
@@ -211,13 +212,18 @@ export default function NewSaleScreen() {
     router.push('/sales' as any);
   };
 
+  const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('screen');
+
   return (
-    <ImageBackground
-      source={require('../assets/images/omyre1.png')}
-      style={styles.background}
-      imageStyle={styles.backgroundImage}
-      resizeMode="contain"
-    >
+    <View style={styles.screenWrap}>
+      <View style={[styles.backgroundLayer, { width: SCREEN_WIDTH, height: SCREEN_HEIGHT }]}>
+        <ImageBackground
+          source={require('../assets/images/omyre1.png')}
+          style={styles.background}
+          imageStyle={styles.backgroundImage}
+          resizeMode="contain"
+        />
+      </View>
     <Modal
       visible={showSuccessModal}
       transparent
@@ -371,11 +377,20 @@ export default function NewSaleScreen() {
         </Pressable>
       </View>
     </SafeAreaView>
-    </ImageBackground>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  screenWrap: {
+    flex: 1,
+    overflow: 'hidden',
+  },
+  backgroundLayer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
   background: { 
     flex: 1, 
     backgroundColor: '#f6b9fa',
