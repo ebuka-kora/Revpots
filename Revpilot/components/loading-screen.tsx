@@ -20,12 +20,11 @@ export function LoadingScreen({ message = 'Preparing your app...' }: LoadingScre
       <View style={styles.content}>
         <View style={styles.logoWrap}>
           <Image
-            source={require('../assets/images/splash-icon.png')}
+            source={require('../assets/images/logo.png')}
             style={styles.logo}
             resizeMode="contain"
           />
         </View>
-        <Text style={styles.title}>RevPilot</Text>
         <Text style={styles.subtitle}>Sales & Invoices</Text>
         <ActivityIndicator
           size="large"
@@ -67,35 +66,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
   },
   logoWrap: {
-    width: 120,
-    height: 120,
-    marginBottom: 16,
-    borderRadius: 24,
-    backgroundColor: 'rgba(255,255,255,0.85)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.6)',
+    width: 200,
+    height: 140,
+    marginBottom: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    ...(Platform.OS === 'web'
-      ? { boxShadow: '0px 2px 8px 0px rgba(47, 47, 58, 0.08)' }
-      : {
-          shadowColor: '#2f2f3a',
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.08,
-          shadowRadius: 8,
-          elevation: 3,
-        }),
   },
   logo: {
-    width: 80,
-    height: 80,
-  },
-  title: {
-    fontFamily: 'Merriweather',
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#2f2f3a',
-    marginBottom: 4,
+    width: 180,
+    height: 120,
   },
   subtitle: {
     fontFamily: 'Merriweather',

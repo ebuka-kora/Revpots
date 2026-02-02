@@ -357,16 +357,18 @@ export default function ProductsScreen() {
         )}
       </ScrollView>
 
-      <View style={[styles.fixedButtonContainer, { paddingBottom: insets.bottom, bottom: tabBarHeight - 50 }]}>
-        <Link href={addProductHref} asChild>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Add product"
-            style={styles.addButton}
-          >
-            <Text style={styles.addButtonText}>Add Product</Text>
-          </Pressable>
-        </Link>
+      <View style={[styles.fixedButtonContainer, { paddingBottom: insets.bottom, paddingRight: 16, bottom: tabBarHeight - 40 }]}>
+        <View style={styles.addButtonBg}>
+          <Link href={addProductHref} asChild>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Add product"
+              style={({ pressed }) => [styles.addButton, pressed && styles.addButtonPressed]}
+            >
+              <MaterialCommunityIcons name="plus" size={28} color="#fff" />
+            </Pressable>
+          </Link>
+        </View>
       </View>
     </SafeAreaView>
     </ImageBackground>
@@ -431,23 +433,39 @@ const styles = StyleSheet.create({
   fixedButtonContainer: {
     position: 'absolute',
     bottom: 0,
-    left: 0,
     right: 0,
-    // backgroundColor: 'rgba(255,255,255,0.78)',
-    paddingHorizontal: 16,
-  
+    left: 0,
+    alignItems: 'flex-end',
   },
-  addButton: {
-    ...GlassCardBase,
-    backgroundColor: 'rgb(108, 149, 214)',
-    borderColor: 'rgba(108, 148, 214, 0.95)',
-    paddingVertical: 12,
+  addButtonBg: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: 'rgb(108, 117, 214)',
     alignItems: 'center',
+    justifyContent: 'center',},
+  addButton: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: 'rgba(108, 148, 214, 0.95)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(108, 148, 214, 1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    ...(Platform.OS === 'web'
+      ? { boxShadow: '0px 4px 12px rgba(108, 148, 214, 0.45)' }
+      : {
+          shadowColor: '#6c94d6',
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.4,
+          shadowRadius: 8,
+          elevation: 8,
+        }),
   },
-  addButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+  addButtonPressed: {
+    opacity: 0.9,
   },
   card: {
     ...GlassCardBase,

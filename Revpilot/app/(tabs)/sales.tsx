@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import {
   ImageBackground,
+  Platform,
   Pressable,
   RefreshControl,
   ScrollView,
@@ -148,12 +149,18 @@ export default function SalesScreen() {
         )}
       </ScrollView>
 
-      <View style={[styles.fixedButtonContainer, { paddingBottom: insets.bottom, bottom: tabBarHeight - 50 }]}>
-        <Link href="/new-sale" asChild>
-          <Pressable accessibilityRole="button" style={styles.primaryButton}>
-            <Text style={styles.primaryButtonText}>New Sale</Text>
-          </Pressable>
-        </Link>
+      <View style={[styles.fixedButtonContainer, { paddingBottom: insets.bottom, paddingRight: 16, bottom: tabBarHeight - 40 }]}>
+        <View style={styles.newSaleButtonBg}>
+          <Link href="/new-sale" asChild>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="New sale"
+              style={({ pressed }) => [styles.newSaleButton, pressed && styles.newSaleButtonPressed]}
+            >
+              <MaterialCommunityIcons name="plus" size={28} color="#fff" />
+            </Pressable>
+          </Link>
+        </View>
       </View>
     </SafeAreaView>
     </ImageBackground>
@@ -189,18 +196,36 @@ const styles = StyleSheet.create({
     color: '#2f2f3a',
     marginBottom: 16,
   },
-  primaryButton: {
-    ...GlassCardBase,
-    backgroundColor: 'rgba(214, 108, 120, 0.66)',
-    borderColor: 'rgba(214, 108, 120, 0.95)',
-    paddingVertical: 14,
+  newSaleButtonBg: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: 'rgba(214, 108, 120, 0.92)',
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  primaryButtonText: {
-    fontFamily: 'Merriweather',
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: '900',
+  newSaleButton: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: 'rgb(228, 97, 97)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(214, 108, 120, 1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    ...(Platform.OS === 'web'
+      ? { boxShadow: '0px 4px 12px rgb(214, 108, 120)' }
+      : {
+          shadowColor: '#d66c78',
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.4,
+          shadowRadius: 8,
+          elevation: 8,
+        }),
+  },
+  newSaleButtonPressed: {
+    opacity: 0.9,
   },
   listContent: {
     paddingBottom: 80, // Space for the fixed button
@@ -253,13 +278,9 @@ const styles = StyleSheet.create({
   fixedButtonContainer: {
     position: 'absolute',
     bottom: 0,
-    left: 0,
     right: 0,
-    // backgroundColor: 'rgba(255,255,255,0.78)',
-    paddingHorizontal: 16,
-    // paddingTop: 12,
-    // borderTopWidth: 1,
-    // borderTopColor: 'rgba(255,255,255,0.4)',
+    left: 0,
+    alignItems: 'flex-end',
   },
   emptyText: {
     textAlign: 'center',
